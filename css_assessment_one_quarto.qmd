@@ -24,7 +24,7 @@ pacman::p_load(
 ) 
 
 library(readr)
-ds <- read_csv("~/Desktop/Vaccine Coverage and Disease Burden - WHO (2017).csv")
+ds <- read_csv("Vaccine Coverage and Disease Burden - WHO (2017).csv")
 ```
 
 **Data Exploration and Contextualization**
