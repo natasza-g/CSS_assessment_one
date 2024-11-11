@@ -209,7 +209,7 @@ ds <- ds %>%
 view(ds)
 ```
 
-For the final piece of wrangling necessary for the data visualization, an additional column is added to the dataset, displaying cumulative cases every year SOURCE FOR FINDING CUMULATIVE FUNCTION
+For the final piece of wrangling necessary for the data visualization, an additional column is added to the dataset, displaying cumulative cases every year.
 
 ```{r}
 ds <- ds %>%

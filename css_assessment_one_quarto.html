@@ -344,7 +344,7 @@ div.csl-indent {
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Year<span class="sc">&gt;</span><span class="dv">1982</span>)</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">view</span>(ds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>For the final piece of wrangling necessary for the data visualization, an additional column is added to the dataset, displaying cumulative cases every year SOURCE FOR FINDING CUMULATIVE FUNCTION</p>
+<p>For the final piece of wrangling necessary for the data visualization, an additional column is added to the dataset, displaying cumulative cases every year.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>ds <span class="ot">&lt;-</span> ds <span class="sc">%&gt;%</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cumulative_measles_cases =</span> <span class="fu">cumsum</span>(measles_cases)) <span class="co">#calculates cumulation of cases per year</span></span>
