@@ -29,9 +29,9 @@ ds <- read_csv("Vaccine Coverage and Disease Burden - WHO (2017).csv")
 
 **Data Exploration and Contextualization**
 
-The dataset under analysis, ‘Vaccine Coverage and Disease Burden Statistics’, provided by the WHO, provides detailed statistics associated with a variety of diseases. The variables cover immunization rates amongst one-year-olds, disease incidence, as well as death rates across the globe’s countries and regions, recorded as values per year. For certain variables and countries, coined ‘Entity’s in the dataset, the data reaches as early as 1974, and stretches until 2015. No data crosses this range. Thus, the dataset offers valuable insight into public health, proving helpful for social scientists.
+The dataset under analysis, ‘Vaccine Coverage and Disease Burden Statistics’, provided by the WHO, provides detailed statistics associated with a variety of diseases. The variables cover immunization rates amongst one-year-olds, disease incidence, as well as death rates across the globe’s countries and regions, recorded as values per year. For certain variables and countries, named ‘Entity’s in the dataset, the data reaches as early as 1974, and stretches until 2015. No data crosses this range. Thus, the dataset offers valuable insight into public health, proving helpful for social scientists.
 
-Such a dataset can act as a key resource in research on public health’s interlink with other social factors, such as socioeconomics, psychology, culture, etc. [\@cohen2006](Cohen%20et%20al.,%202006)*.* Advantageously, the dataset provides data on both immunization and incidence of certain diseases which severely impacted society, such as polio and measles. Thus, we are able to examine the correlation between immunization and incidence. Social scientists can further use this to their advantage, by examining changes in such variables and their relation with other social factors. Such research can be fed back into medicinal development, and public health related policies.
+Such a dataset can act as a key resource in research on public health’s interlink with other social factors, such as socioeconomic factors, psychology, culture, etc. [\@cohen2006](Cohen%20et%20al.,%202006)*.* Advantageously, the dataset provides data on both immunization and incidence of certain diseases which have severely impacted society, such as polio and measles. Thus, we are able to examine the correlation between immunization and incidence. Social scientists can further use this to their advantage, by examining changes in such variables and their relation with other social factors. Such research can be fed back into medicinal development, and public health related policies.
 
 The means, standard deviations, and missing values were calculated using their respective functions. They were calculated for each Entity in each variable. However, due to the nature of the data being over a period of time, the insight provided by these statistics is limited. An Entity's mean for one variable which stretches over a period of years oversimplifies the data, and does not demonstrate the changes in the variable, and thus lacks meaning. Similarly, the standard deviation, measuring dispersion from the mean, does not reveal any patterns occurring over time, thus lacking value in the given research focus.
 
@@ -86,7 +86,7 @@ ds %>%
 
 **Data Processing and Functional Programming**
 
-To avoid any human error in the programming process due to the length of the dataset's name, it was renamed to 'ds', and will be referred to as such from now onward.
+To avoid any human error in the programming process due to the length of the dataset's name, it was renamed to 'ds', and will be referred to as such from now onwards.
 
 As can be seen in the dataset, only two diseases have information on both immunization rates and disease incidence: polio and measles. Thus, these two diseases were selected to observe the correlation between the two variables. As shown below, to tidy the dataset for it to consist of only information needed for the final visualizations, we selected the six variables needed, and renamed those with longer names for simplicity for the remaining coding process.
 
@@ -104,11 +104,11 @@ ds <- ds %>%
 str(ds)
 ```
 
-Due to the extensive number of countries that data is provided for within the dataset, the analysis must be narrowed down. Therefore, it was opted to select the country with the greatest range in case numbers across the years data is provided for. In a country with a large increase in case numbers, an effective immunization system is vital, thus comparing the two with each other, and a cumulative cases visualization helps evaluate whether the variables may correspond, and determine the efficacy of the immunization schedule. Additionally, focusing on a country with a large range allows for a clearer view of visual trends, further easing the comparison.
+Due to the extensive number of countries that data is provided for within the dataset, the analysis must be narrowed down. Therefore, it was opted to select the country with the greatest range in case numbers across the years data is provided for. In a country with a large increase in case numbers, an effective immunization system is vital, thus comparing the two with each other, and a cumulative cases visualization helps evaluate whether the variables may correspond, and determine the efficacy of the immunization. Additionally, focusing on a country with a large range allows for a clearer view of visual trends, further easing the comparison.
 
 To achieve this, first, a function to calculate range of cases per Entity had to be written. The pre-existing range function in r returns a vector containing maximum and minimum values, however the aim is to find the difference between the maximum and minimum values, thus a new function had to be written.
 
-Below, is the initial function written. While the general structure works, there is an error in code of the function's argument. By merely making the argument 'variable', the input is detected as an object rather than a variable within ds.
+Below, is the first attempt at writing the function. While the general structure works, there is an error in the code of the function's argument. By merely making the argument 'variable', the input is detected as an object rather than a variable within ds.
 
 ```{r}
 entity_range <- function(variable){ #defines a function with an attempt to use variable names as the argument.
@@ -147,7 +147,7 @@ Finally, ChatGPT is consulted in attempt to identify the issue, which proposed s
 ```{r}
 
 entity_range <- function(variable) { #defines a function 'entity_range' which takes variable names as the input.
-  ds %>% #begins data pipelin.e
+  ds %>% #begins data pipeline
     group_by(Entity) %>% #groups the data by country.
     summarize(range = max(.data[[variable]], na.rm = TRUE) - min(.data[[variable]], na.rm = TRUE)) 
   #'summarize' creates a new summary for each entity.
@@ -157,7 +157,7 @@ entity_range <- function(variable) { #defines a function 'entity_range' which ta
 }
 ```
 
-The functions accessing variables within the dataset dynamically means it accesses the column under whichever variable name is input as the argument. If it were not dynamic, the function would be locked to one variable. Additionally, this differs from the original code written as it accesses the input as a variable rather than an object.
+The function accessing variables within the dataset dynamically means it accesses the column under whichever variable name is input as the argument. If it were not dynamic, the function would be locked to one variable. Additionally, this differs from the original code written as it accesses the input as a variable rather than an object.
 
 Once this function was written, it was applied to the necessary columns, as shown below. The argument must be written as a string to be recognized as a column name rather than an object.
 
@@ -245,11 +245,11 @@ Figure A (left): measles cases, Figure B (middle): measles imm, Figure C (right)
 
 **Interpretation**
 
-'Measles Cases in China Per Year' shows an overall negative trend, meaning the number of measles cases per year in China has decreased overall between 1983 and 2015. However, there are fluctuations within the data, with a particular plateau between 1994 and 2000, followed by a spurge, until it begins to fall again.
+'Measles Cases in China Per Year' shows an overall negative trend, meaning the number of measles cases per year in China has decreased overall between 1983 and 2015. However, there are fluctuations within the data, with a particular plateau between 1994 and 2000, followed by a surge, until it begins to fall again.
 
-To compare Figure B with Figure A, there is an overall positive trend - measles immunization rates increase throughout the years. However, like Figure A, there are fluctuations. At approximately a similar time to the plateau in Figure A, there is a fall in immunization rates, suggesting a correlation between the two.
+To compare Figure B with Figure A, there is an overall positive trend - measles immunization rates increase throughout the years. However,like Figure A, there are fluctuations. At approximately a similar time to the plateau in Figure A, there is a fall in immunization rates, suggesting a correlation between the two.
 
-Finally, Figure C shows the cumulative cases slow near the end of the data, when the immunization rate begins to reach consistent high rates each year.
+Finally, Figure C shows the cumulative cases slow near the end of the data, when the immunization rate begins to reach consistent high rates each year, again suggesting correlation.
 
 These trends, at first glance, although not supported by deeper statistical analyses such as regression, suggest there may be a correlation between immunization rates and disease incidence. Furthermore, the fluctuations within the trends may suggest other factors at play, such as socioeconomic, cultural, etc. Such factors have been shown to have an influence on vaccine uptake hesitancy [@enyinnaya2024], which would impact disease incidence. Thus, such visualizations can be utilized by social scientists in research on public health and its relationship with other social factors.
 
@@ -261,4 +261,4 @@ Decidedly, its use was most impactful in the creation of the entity_range functi
 
 Few issues were encountered when communicating with ChatGPT, with the experience running smoothly overall. Issues primarily stemmed from a lack of detail in questions posed, resulting in sending several messages before receiving the desired response from ChatGPT. As a result, chat threads became long and unorganized, making finding desired information within them time-consuming.
 
-In conclusion, ChatGPT aided both the computational process and learning experience, ensuring full understanding was had, helping reach the interpretation that there is a relationship between measles immunization rates, disease incidence, and cumulative cases, which can be seen via the visualisation.
+In conclusion, ChatGPT aided both the computational process and learning experience, ensuring full understanding was had, helping reach the interpretation that there is a relationship between measles immunization rates, disease incidence, and cumulative cases, which can be seen via the visualization.

@@ -13,9 +13,7 @@ library(knitr)
 library(readr)
 ds <- read_csv("~/Desktop/Vaccine Coverage and Disease Burden - WHO (2017).csv")
 
-glimpse(ds)
-str(ds)
-
+#part 1A data overview
 ds %>%
   group_by(Entity) %>%
   summarise(
@@ -58,17 +56,7 @@ ds %>%
   )
 
 
-
-sum(is.na())
-#part 1A data overview 
-skim(ds)
-
-
-
 #part 1B
-#Vaccine_Coverage_and_Disease_Burden_WHO_2017_ <- Vaccine_Coverage_and_Disease_Burden_WHO_2017_ %>%
-#rename(polio_imm = `Polio (Pol3) immunization coverage among 1-year-olds (WHO 2017)`, measles_imm = `Measles (MCV) immunization coverage among 1-year-olds (WHO 2017)`, polio_cases = `Number confirmed polio cases (WHO 2017)`, measles_cases = `Number of confirmed measles cases (WHO 2017)`)
-#view(Vaccine_Coverage_and_Disease_Burden_WHO_2017_)
 
 ds <- ds %>%
   select(Entity, Year, `Polio (Pol3) immunization coverage among 1-year-olds (WHO 2017)`, `Measles (MCV) immunization coverage among 1-year-olds (WHO 2017)`, `Number confirmed polio cases (WHO 2017)`, `Number of confirmed measles cases (WHO 2017)`) %>%
@@ -80,16 +68,9 @@ ds <- ds %>%
   ) %>%
   #filter(Entity == "China")
   view(ds)
-skim(ds)
-glimpse(ds)
 
-ds %>%
-  group_by(Entity) %>%
-  summarise(
-    across(c(mean(polio_imm, measles_imm, polio_cases, measles_cases, na.rm = TRUE)) %>% round(2))
-  )
 
-#my code
+#first attempt at function
 entity_range <- function(variable){
   ds %>%
     group_by(Entity) %>%
@@ -99,19 +80,7 @@ entity_range <- function(variable){
 polio_cases_range <- entity_range(ds$polio_cases)
 print(polio_cases_range)
 
-#chatgpt refined code
-entity_range <- function(variable) {
-  ds %>%
-    group_by(Entity) %>%
-    summarize(range = max({{ variable }}, na.rm = TRUE) - min({{ variable }}, na.rm = TRUE))
-}
-entity_range <- function(variable) {
-  ds %>%
-    group_by(Entity) %>%
-    summarize(range = max(.data[[variable]], na.rm = TRUE) - min(.data[[variable]], na.rm = TRUE))
-}
-
-#i think this is final??
+#function using indices
 entity_range <- function(i) {
   ds %>%
     group_by(Entity) %>%
@@ -130,6 +99,13 @@ print(polio_cases_range)
 measles_cases_range <- entity_range(6)
 print(measles_cases_range)
 
+#final function
+entity_range <- function(variable) {
+  ds %>%
+    group_by(Entity) %>%
+    summarize(range = max(.data[[variable]], na.rm = TRUE) - min(.data[[variable]], na.rm = TRUE))
+}
+
 
 #function applied to polio cases
 polio_cases_range <- entity_range("polio_cases")
@@ -141,25 +117,15 @@ max_range_entity_polio <- polio_cases_range%>%
   slice(1)
 print(max_range_entity_polio)
 
-max_range_entity_polio <- polio_cases_range%>%
-  arrange(desc(range))
-print(max_range_entity_polio)
-
 #function applied to measles cases
 measles_cases_range <- entity_range("measles_cases")
 print(measles_cases_range)
 
-#finding entity with most measles cases. first, my code didnt include the filter, and my result was world. so i edited teh code so that it doesnt include world and reran it, and got china. 
+#finding entity with most measles cases. first, my code didnt include the filter, and my result was world. so i edited the code so that it doesn't include world and reran it, and got china. 
 max_range_entity_measles <- measles_cases_range %>%
   filter(Entity != "World") %>%
   arrange(desc(range)) %>%
   slice(1)
-
-max_range_entity_measles <- measles_cases_range %>%
-  filter(Entity != "World") %>%
-  arrange(desc(range))
-
-
 
 print(max_range_entity_measles)
 
@@ -169,11 +135,12 @@ ds <- ds %>%
   filter(Entity == "China")
 view(ds)
 
-#china only has info for immunization from 1983 onwards, so we focus on those years.
+#china only has info for immunization from 1983 onward, so we focus on those years.
 ds <- ds %>%
   filter(Year>1982)
 view(ds)
 glimpse(ds)
+
 #next, we add a column that shows cumulative cases
 ds <- ds %>%
   mutate(cumulative_measles_cases = cumsum(measles_cases))
@@ -185,7 +152,7 @@ view(ds)
 #data visualising 
 #create a plot for china measles case number and immunization rate 
 
-
+#without automating plotting
 ds %>%
   ggplot(aes(x = Year, y = measles_cases)) + geom_point() + labs(
     title = "Number of Measles Cases in China per year",
@@ -218,7 +185,7 @@ ds %>%
   ) +
   geom_smooth() 
 
-#final visualisation code
+#final visualisation code with automating 
 create_scatter_plot <- function(i) {
   ds %>%
     ggplot(aes_string(x = names(ds)[2], y = names(ds)[i])) +
@@ -234,43 +201,7 @@ plots_list <- map(3:ncol(ds), create_scatter_plot)
 plots_grid <- gridExtra::grid.arrange(grobs = plots_list, ncol = 3)
 
 
-#max(Vaccine_Coverage_and_Disease_Burden_WHO_2017_$measles_imm) - min(Vaccine_Coverage_and_Disease_Burden_WHO_2017_$measles_imm)
 
-#entity_greatest_range <- function(x){
-#Vaccine_Coverage_and_Disease_Burden_WHO_2017_ %>%
-#group_by(Entity)
-#summarize(
-#range = max(x, na.rm = TRUE) - min(x, na.rm = TRUE)
-# )
-#greatest_range_entity = filter(range == max(range, na.rm = TRUE))
-#return(greatest_range_entity)
-
-
-#entity_greatest <- entity_greatest_range(measles_imm)
-#print(entity_greatest)
-
-
-
-
-
-
---
-  
-  #greatest_range_entity <- result %>%
-  #filter(range == max(range, na.rm = TRUE))
-  
-  # Print the final result for debugging
-  #print(greatest_range_entity)  # Show the entity with the greatest range
-  
-  #return(greatest_range_entity)
-  #}
-  
-  
-  --
-  #creating function for renaming variables 
-  
-  rename_variable <- function(disease, action)
-    rename()
 
 
 
