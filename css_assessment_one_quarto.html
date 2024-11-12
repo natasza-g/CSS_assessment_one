@@ -336,42 +336,64 @@ div.csl-indent {
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>ds <span class="ot">&lt;-</span> ds <span class="sc">%&gt;%</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Entity, Year, measles_cases, measles_imm) <span class="sc">%&gt;%</span></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Entity <span class="sc">==</span> <span class="st">"China"</span>)</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="fu">view</span>(ds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(ds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tibble [42 × 4] (S3: tbl_df/tbl/data.frame)
+ $ Entity       : chr [1:42] "China" "China" "China" "China" ...
+ $ Year         : num [1:42] 1974 1975 1976 1977 1978 ...
+ $ measles_cases: num [1:42] 3276531 2553084 2558995 2640161 2377776 ...
+ $ measles_imm  : num [1:42] NA NA NA NA NA NA NA NA NA 78 ...</code></pre>
+</div>
 </div>
 <p>As can be seen, China only has data from 1983 onward, so we filter those years.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>ds <span class="ot">&lt;-</span> ds <span class="sc">%&gt;%</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Year<span class="sc">&gt;</span><span class="dv">1982</span>)</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">view</span>(ds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>ds <span class="ot">&lt;-</span> ds <span class="sc">%&gt;%</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Year<span class="sc">&gt;</span><span class="dv">1982</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(ds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tibble [33 × 4] (S3: tbl_df/tbl/data.frame)
+ $ Entity       : chr [1:33] "China" "China" "China" "China" ...
+ $ Year         : num [1:33] 1983 1984 1985 1986 1987 ...
+ $ measles_cases: num [1:33] 781475 619709 418159 198738 104925 ...
+ $ measles_imm  : num [1:33] 78 84 88 63 77 95 95 98 92 87 ...</code></pre>
+</div>
 </div>
 <p>For the final piece of wrangling necessary for the data visualization, an additional column is added to the dataset, displaying cumulative cases every year.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>ds <span class="ot">&lt;-</span> ds <span class="sc">%&gt;%</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cumulative_measles_cases =</span> <span class="fu">cumsum</span>(measles_cases)) <span class="co">#calculates cumulation of cases per year</span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">view</span>(ds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>ds <span class="ot">&lt;-</span> ds <span class="sc">%&gt;%</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cumulative_measles_cases =</span> <span class="fu">cumsum</span>(measles_cases)) <span class="co">#calculates cumulation of cases per year</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(ds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tibble [33 × 5] (S3: tbl_df/tbl/data.frame)
+ $ Entity                  : chr [1:33] "China" "China" "China" "China" ...
+ $ Year                    : num [1:33] 1983 1984 1985 1986 1987 ...
+ $ measles_cases           : num [1:33] 781475 619709 418159 198738 104925 ...
+ $ measles_imm             : num [1:33] 78 84 88 63 77 95 95 98 92 87 ...
+ $ cumulative_measles_cases: num [1:33] 781475 1401184 1819343 2018081 2123006 ...</code></pre>
+</div>
 </div>
 <p>The visualizations to be made are all scatter plots, with the same X-axis of ‘Year’, and varying Y-axes. Thus, a function was created automating plotting. Repeating the same process three times would be more time consuming and more prone to error, thus creating a function increases efficiency.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>create_scatter_plot <span class="ot">&lt;-</span> <span class="cf">function</span>(i) { <span class="co">#defines a function automating plotting a scatter plot, taking 'i' as an argument, which represents column index. </span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  ds <span class="sc">%&gt;%</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes_string</span>(<span class="at">x =</span> <span class="fu">names</span>(ds)[<span class="dv">2</span>], <span class="at">y =</span> <span class="fu">names</span>(ds)[i])) <span class="sc">+</span> <span class="co">#'aes_string' labels the x and y axes.</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">#'names(ds)[2]' attributes the x-axis to the column in ds of the second index, which is 'Year'.</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">#'names(ds)[i]' attributes the y-axis to column 'i', enabling any variable within ds to be used when the function is called.</span></span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="co">#plots each piece of data as a point on the graph, creating a scatter plot.</span></span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>( <span class="co">#adds labels to graph</span></span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">title =</span> <span class="fu">glue</span>(<span class="st">"{names(ds)[i]} in China per year"</span>), <span class="co">#'glue' combines objects with strings. Here, the object is 'names(ds)[i]' which allows the name of the column at the given index to be used in the title. </span></span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> <span class="fu">glue</span>(<span class="st">"{names(ds)[i]}"</span>) <span class="co">#'glue' dynamically sets the y-axis label as the name of the column at the given index.</span></span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_smooth</span>() <span class="co">#adds a smooth line of best fit, touching all points of the graph.</span></span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>plots_list <span class="ot">&lt;-</span> <span class="fu">map</span>(<span class="dv">3</span><span class="sc">:</span><span class="fu">ncol</span>(ds), create_scatter_plot) <span class="co">#creates scatter plots iterating from the third column of ds to the last one.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>create_scatter_plot <span class="ot">&lt;-</span> <span class="cf">function</span>(i) { <span class="co">#defines a function automating plotting a scatter plot, taking 'i' as an argument, which represents column index. </span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  ds <span class="sc">%&gt;%</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes_string</span>(<span class="at">x =</span> <span class="fu">names</span>(ds)[<span class="dv">2</span>], <span class="at">y =</span> <span class="fu">names</span>(ds)[i])) <span class="sc">+</span> <span class="co">#'aes_string' labels the x and y axes.</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">#'names(ds)[2]' attributes the x-axis to the column in ds of the second index, which is 'Year'.</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">#'names(ds)[i]' attributes the y-axis to column 'i', enabling any variable within ds to be used when the function is called.</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="co">#plots each piece of data as a point on the graph, creating a scatter plot.</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>( <span class="co">#adds labels to graph</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">title =</span> <span class="fu">glue</span>(<span class="st">"{names(ds)[i]} in China per year"</span>), <span class="co">#'glue' combines objects with strings. Here, the object is 'names(ds)[i]' which allows the name of the column at the given index to be used in the title. </span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> <span class="fu">glue</span>(<span class="st">"{names(ds)[i]}"</span>) <span class="co">#'glue' dynamically sets the y-axis label as the name of the column at the given index.</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_smooth</span>() <span class="co">#adds a smooth line of best fit, touching all points of the graph.</span></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>plots_list <span class="ot">&lt;-</span> <span class="fu">map</span>(<span class="dv">3</span><span class="sc">:</span><span class="fu">ncol</span>(ds), create_scatter_plot) <span class="co">#creates scatter plots iterating from the third column of ds to the last one.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: `aes_string()` was deprecated in ggplot2 3.0.0.
 ℹ Please use tidy evaluation idioms with `aes()`.
 ℹ See also `vignette("ggplot2-in-packages")` for more information.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>plots_grid <span class="ot">&lt;-</span> gridExtra<span class="sc">::</span><span class="fu">grid.arrange</span>(<span class="at">grobs =</span> plots_list, <span class="at">ncol =</span> <span class="dv">3</span>) <span class="co">#arranges plots in a grid</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>plots_grid <span class="ot">&lt;-</span> gridExtra<span class="sc">::</span><span class="fu">grid.arrange</span>(<span class="at">grobs =</span> plots_list, <span class="at">ncol =</span> <span class="dv">3</span>) <span class="co">#arranges plots in a grid</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>`geom_smooth()` using method = 'loess' and formula = 'y ~ x'
 `geom_smooth()` using method = 'loess' and formula = 'y ~ x'

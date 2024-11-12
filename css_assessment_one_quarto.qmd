@@ -197,7 +197,7 @@ The Entity "World' is filtered out as it originally was returned as the entity w
 ds <- ds %>%
   select(Entity, Year, measles_cases, measles_imm) %>%
   filter(Entity == "China")
-view(ds)
+str(ds)
 
 ```
 
@@ -206,7 +206,7 @@ As can be seen, China only has data from 1983 onward, so we filter those years.
 ```{r}
 ds <- ds %>%
   filter(Year>1982)
-view(ds)
+str(ds)
 ```
 
 For the final piece of wrangling necessary for the data visualization, an additional column is added to the dataset, displaying cumulative cases every year.
@@ -214,7 +214,7 @@ For the final piece of wrangling necessary for the data visualization, an additi
 ```{r}
 ds <- ds %>%
   mutate(cumulative_measles_cases = cumsum(measles_cases)) #calculates cumulation of cases per year
-view(ds)
+str(ds)
 ```
 
 The visualizations to be made are all scatter plots, with the same X-axis of 'Year', and varying Y-axes. Thus, a function was created automating plotting. Repeating the same process three times would be more time consuming and more prone to error, thus creating a function increases efficiency.
